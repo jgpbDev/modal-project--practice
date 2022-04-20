@@ -1,6 +1,20 @@
 <template>
   <h1>{{ title }}</h1>
-  <Modal :header="header" :text="text" theme="sale"/>
+  <p>Welcome...</p>
+  <div v-if="showModal">
+    <Modal :header="header" :text="text" theme="sale" @close="toggleModal">
+      <!-- This is the slot to render on the component -->
+      <h1>Este es el contenido del slot</h1>
+      <p>Este contenido lo pasamos al componente escribiendolo desde donde mandamos llamar el componente</p>
+      <!-- Also we can pass named slots -->
+      <template v-slot:links>
+        <a href="#">Sign up now</a>
+        <a href="#">More info</a>
+      </template>
+    </Modal>
+  </div>
+  <!-- Event modifiers: could be '@click.right' or '@click.alt' for example -->
+  <button @click.alt="toggleModal">Open modal (alt)</button>
 </template>
 
 <script>
@@ -14,7 +28,8 @@ export default {
     return {
       title: 'This is my title in the data',
       header: 'Sign up to this new app',
-      text: 'This is the text that I am using for testing Vue 3'
+      text: 'This is the text that I am using for testing Vue 3',
+      showModal: false
     }
   },
   methods: {
@@ -22,6 +37,9 @@ export default {
       console.log(this.$refs.name)
       this.$refs.name.classList.add('active')
       this.$refs.name.focus();
+    },
+    toggleModal() {
+      this.showModal =  !this.showModal;
     }
   }
 }
