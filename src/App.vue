@@ -1,20 +1,31 @@
 <template>
   <h1>{{ title }}</h1>
   <p>Welcome...</p>
+  
   <div v-if="showModal">
     <Modal :header="header" :text="text" theme="sale" @close="toggleModal">
-      <!-- This is the slot to render on the component -->
-      <h1>Este es el contenido del slot</h1>
-      <p>Este contenido lo pasamos al componente escribiendolo desde donde mandamos llamar el componente</p>
       <!-- Also we can pass named slots -->
       <template v-slot:links>
         <a href="#">Sign up now</a>
         <a href="#">More info</a>
       </template>
+      <!-- This is the slot to render on the component -->
+      <h1>Este es el contenido del slot</h1>
+      <p>Este contenido lo pasamos al componente escribiendolo desde donde mandamos llamar el componente</p>
     </Modal>
   </div>
+  <div v-if="showModal2">
+    <Modal @close="toggleModalTwo">
+      <template v-slot:mySlot>
+        <a href="#">This is my button</a>
+      </template>
+      <h1>Este modal fue creado por mí</h1>
+    </Modal>
+  </div>
+  
   <!-- Event modifiers: could be '@click.right' or '@click.alt' for example -->
   <button @click.alt="toggleModal">Open modal (alt)</button>
+  <button @click="toggleModalTwo">Open the second modal</button>
 </template>
 
 <script>
@@ -29,7 +40,8 @@ export default {
       title: 'This is my title in the data',
       header: 'Sign up to this new app',
       text: 'This is the text that I am using for testing Vue 3',
-      showModal: false
+      showModal: false,
+      showModal2: false
     }
   },
   methods: {
@@ -40,6 +52,9 @@ export default {
     },
     toggleModal() {
       this.showModal =  !this.showModal;
+    },
+    toggleModalTwo() {
+      this.showModal2 =  !this.showModal2;
     }
   }
 }

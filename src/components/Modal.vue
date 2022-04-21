@@ -18,6 +18,7 @@
       <div class="actions">
         <!-- We are calling the named slot -->
         <slot name="links"></slot>
+        <slot name="mySlot"></slot>
       </div>
     </div>
   </div>
@@ -50,8 +51,8 @@ export default {
     width: 100%;
     height: 100%;
   }
-  h1 {
-    color: aqua;
+  .modal :deep(h1) {
+    color: green;
     border: none;
     padding: 0;
   }
@@ -62,7 +63,7 @@ export default {
     text-align: center;
     margin: 30px 0 10px 0;
   }
-  .modal .actions a {
+  .modal .actions :deep(a) {
     color: #333;
     padding: 8px;
     border: 1px solid #eee;
