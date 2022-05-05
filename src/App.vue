@@ -1,60 +1,37 @@
 <template>
-  <h1>{{ title }}</h1>
-  <p>Welcome...</p>
-  
-  <div v-if="showModal">
-    <Modal :header="header" :text="text" theme="sale" @close="toggleModal">
-      <!-- Also we can pass named slots -->
-      <template v-slot:links>
-        <a href="#">Sign up now</a>
-        <a href="#">More info</a>
-      </template>
-      <!-- This is the slot to render on the component -->
-      <h1>Este es el contenido del slot</h1>
-      <p>Este contenido lo pasamos al componente escribiendolo desde donde mandamos llamar el componente</p>
-    </Modal>
-  </div>
-  <div v-if="showModal2">
-    <Modal @close="toggleModalTwo">
-      <template v-slot:mySlot>
-        <a href="#">This is my button</a>
-      </template>
-      <h1>Este modal fue creado por mí</h1>
-    </Modal>
-  </div>
-  
-  <!-- Event modifiers: could be '@click.right' or '@click.alt' for example -->
-  <button @click.alt="toggleModal">Open modal (alt)</button>
-  <button @click="toggleModalTwo">Open the second modal</button>
+  <h1>Ninja Reaction Timer</h1>
+  <button @click="start" :disabled="isPlaying">play</button>
+  <Block v-if="isPlaying" :delay="delay" @end="endGame" />
+  <Results v-if="showResults" :score="results"/>
 </template>
 
 <script>
-import Modal from "./components/Modal.vue"
+import Block from "./components/Block.vue"
+import Results from "./components/Results.vue"
 
 export default {
-  //It is optional to name our components
   name: 'App',
-  components: { Modal },
+  components: { Block, Results },
   data() {
     return {
-      title: 'This is my title in the data',
-      header: 'Sign up to this new app',
-      text: 'This is the text that I am using for testing Vue 3',
-      showModal: false,
-      showModal2: false
+      isPlaying: false,
+      delay: null,
+      showResults: false,
+      results: null
     }
   },
   methods: {
-    handleClick() {
-      console.log(this.$refs.name)
-      this.$refs.name.classList.add('active')
-      this.$refs.name.focus();
+    start(){
+      this.delay = 2000 + Math.random() * 5000;
+      this.isPlaying = true;
+      this.showResults = false;
     },
-    toggleModal() {
-      this.showModal =  !this.showModal;
-    },
-    toggleModalTwo() {
-      this.showModal2 =  !this.showModal2;
+    //We've sent the argument of this method as data in the emition of this event
+    //from the Blok component
+    endGame(reactionTime) {
+      this.isPlaying = false;
+      this.results = reactionTime;
+      this.showResults = true;
     }
   }
 }
@@ -66,12 +43,22 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #444;
   margin-top: 60px;
 }
-h1 {
-  border-bottom: 1px solid #dddddd;
-  display: inline-block;
-  padding-bottom: 10px;
+button {
+  background: #0faf87;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin: 10px;
+}
+button[disabled] {
+  opacity: 0.2;
+  cursor: not-allowed;
 }
 </style>
